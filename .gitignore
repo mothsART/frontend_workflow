@@ -1,0 +1,11 @@
+# npm
+node_modules
+npm-debug.log
+
+# build
+contributors.json
+dist
+*.bundle.js
+scripts/_
+
+*~

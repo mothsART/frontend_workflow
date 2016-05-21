@@ -1,0 +1,5 @@
+:fullscreen a {
+  position: relative;
+  z-index: 1337;
+  display: flex;
+}
