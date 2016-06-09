@@ -20,6 +20,14 @@ const js_source = './app/js/';
 const riot_source = './app/tags/';
 const destination = './output/';
 
+function addPrefix(element) {
+    return "./lib/" + element;
+}
+
+const lib = require('./lib/lib.js');
+lib.css = lib.css.map(addPrefix);
+lib.js = lib.js.map(addPrefix);
+
 // QA
 gulp.task('css_qa', function () {
     gulp.src(css_source + '*.css')
@@ -52,7 +60,7 @@ gulp.task('css', function () {
         require("postcss-reporter")(),
         cssnano(),
     ];
-    gulp.src(css_source + '*.css')
+    gulp.src(lib.css.concat(css_source + '*.css'))
     .pipe(postcss(processors))
     .pipe(sourcemaps.init())
     .pipe(sourcemaps.write('.'))
@@ -60,7 +68,7 @@ gulp.task('css', function () {
 });
 
 gulp.task('js', function () {
-    gulp.src(js_source + '*.js')
+    gulp.src(lib.js.concat(js_source + '*.js'))
     .pipe(sourcemaps.init())
     .pipe(babel({ presets: ['es2015'] }))
     .pipe(concat('script.js'))
@@ -70,6 +78,9 @@ gulp.task('js', function () {
 });
 
 gulp.task('riot', function () {
+    gulp.src('./node_modules/riot/riot.min.js')
+    .pipe(gulp.dest(destination));
+
     gulp.src(riot_source + '*.tag')
     .pipe(sourcemaps.init())
     .pipe(riot())
@@ -104,3 +115,4 @@ gulp.task('clean', function () {
 
 // Default
 gulp.task('default', ['css', 'js', 'riot']);
+
